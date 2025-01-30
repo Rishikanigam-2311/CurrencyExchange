@@ -1,0 +1,12 @@
+{
+    "Routes" {
+        "API_KEY": "20b8a5d34f31e82e810157230e3a7d53",
+        "BaseUrl": "http://data.fixer.io/api/"
+
+    }
+
+    "ConnectionString" {
+        "db_ConnectionSring" : ""
+    }
+        
+}

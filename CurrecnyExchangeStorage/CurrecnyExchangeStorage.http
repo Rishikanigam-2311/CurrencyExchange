@@ -1,0 +1,6 @@
+@CurrecnyExchangeStorage_HostAddress = http://localhost:5264
+
+GET {{CurrecnyExchangeStorage_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
