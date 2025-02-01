@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ExchangeCurrencyAPIService;
+
 [ApiController]
 [Route("[Controllers]")]
 public class CurrencyExchnageAPISercvice : ControllerBase
 {
-    public async Task<Dictionary<string, decimal>> GetCurrencyExchangeRates(string date)
+    public async Task<Dictionary<string, double>> GetCurrencyExchangeRates(string date)
+    
     {
-        AppConfiguration config = new AppConfiguration();
-        string url = $"{config?.Routes?.BaseURL}{date}?access_key={config?.Routes?.API_KEY}";
+        string url = $"{AppConfiguration.Base_Url}{date}?access_key={AppConfiguration.Api_Key}";
         Console.WriteLine(url);
 
         using HttpClient client = new();
@@ -19,15 +20,18 @@ public class CurrencyExchnageAPISercvice : ControllerBase
         {
             throw new Exception($"Unable to fetch exhange rate: {response.StatusCode}");
         }
+        
 
+
+
+
+        // Deserialize rates into a dictionary
+        //string responseData = null;
         string responseData = await response.Content.ReadAsStringAsync();
-        //dynamic json = JsonConvert.DeserializeObject(responseData);
-
-
-
+        dynamic json = JsonConvert.DeserializeObject(responseData);
+       
         // Deserialize rates into a dictionary
-        //return JsonConvert.DeserializeObject<Dictionary<string, double>>(JsonConvert.SerializeObject(json?.rates));
-        // Deserialize rates into a dictionary
-        return JsonConvert.DeserializeObject<Dictionary<string, decimal>>(responseData);
+        return JsonConvert.DeserializeObject<Dictionary<string, double>>(JsonConvert.SerializeObject(json?.rates));
+       
     }
 }

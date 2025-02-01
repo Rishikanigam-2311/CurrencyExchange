@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 public partial class CurrencyConverter
 {
-    private static Dictionary<string, double> exchangeRates;
+    private static readonly Dictionary<string, double>? exchangeRates;
 
     public static async Task Main()
     {
@@ -16,30 +16,30 @@ public partial class CurrencyConverter
             string sourceCurrecny = Console.ReadLine().ToUpper();
 
             Console.Write("Enter the target currency code: ");
-            string targetCurrency = Console.ReadLine()?.ToUpper();
+            string targetCurrency = Console.ReadLine().ToUpper();
 
 
             Console.Write("Enter the amount: ");
             double amount = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("Do you want exchange rate by any specific Date: ");
-            string answer = Console.ReadLine();
+            string answer = Console.ReadLine().ToUpper();
             string date = "latest";
             if (answer == "YES")
             {
-                Console.Write("Enter the Data in Formate yyyy-mm--dd: ");
+                Console.Write("Enter the Data in format yyyy-mm-dd: ");
                 date = Console.ReadLine();
 
             }
 
-            Console.WriteLine("Fetch latest exchange rates-");
+            Console.WriteLine("Fetch latest exchange rates: ");
             CurrencyExchnageAPISercvice apiService = new CurrencyExchnageAPISercvice();
 
             var exchangeRates = await apiService.GetCurrencyExchangeRates(date);
 
-            double result = ConvertCurrency(sourceCurrecny, targetCurrency, amount);
+            double result = ConvertCurrency(sourceCurrecny, targetCurrency, amount,exchangeRates);
 
-            Console.WriteLine($"\n{amount} {sourceCurrecny} is equal to {result:F2} {targetCurrency}.");
+            Console.WriteLine($"\n{amount} {sourceCurrecny} is equal to {result:F2} in {targetCurrency}.");
         }
         catch (Exception e)
         {
@@ -47,19 +47,19 @@ public partial class CurrencyConverter
         }
     }
 
-    public static double ConvertCurrency(string sourceCurrecny, string targetCurrency, double amount)
+    public static double ConvertCurrency(string sourceCurrecny, string targetCurrency, double amount, Dictionary<string,double> rates)
     {
-        if (!exchangeRates.ContainsKey(sourceCurrecny))
+        if (!rates.ContainsKey(sourceCurrecny))
         {
             throw new ArgumentException($"Invalid currency code: {sourceCurrecny}");
         }
-        if (!exchangeRates.ContainsKey(targetCurrency))
+        if (!rates.ContainsKey(targetCurrency))
         {
             throw new ArgumentException($"Invalid currency code: {targetCurrency}");
         }
 
         // Convert from the source currency to EUR, then to the target currency
-        double convertedAmount = (amount / exchangeRates[sourceCurrecny]) * exchangeRates[targetCurrency];
+        double convertedAmount = (amount / rates[sourceCurrecny]) * rates[targetCurrency];
         return convertedAmount;
     }
 
