@@ -57,13 +57,11 @@ public class CurrencyUpdaterService
             using (var command = new SqlCommand("SP_CurrencyUpdates", connection))
             {
                 command.CommandType = System.Data.CommandType.StoredProcedure;
-
-
                 command.Parameters.AddWithValue("@CurrencyCode", currencyCode);
                 command.Parameters.AddWithValue("@Date", date);
                 command.Parameters.AddWithValue("@Rate", rate);
 
-               // await command.ExecuteNonQueryAsync();
+               await command.ExecuteNonQueryAsync();
             }
 
             Console.WriteLine($"Successfully inserted exchange rate for {currencyCode}.");
