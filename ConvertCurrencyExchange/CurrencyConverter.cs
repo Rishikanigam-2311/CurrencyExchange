@@ -7,7 +7,7 @@ public class CurrencyExchangeCalculator
 {
     public static async Task Main()
     {
-
+        //Point 1-a - Console app for currency converter
         try
         {
             Console.Write("Welcome to Currency Exchange calculator! \n Enter the first currency code: ");
@@ -27,6 +27,7 @@ public class CurrencyExchangeCalculator
             Console.Write("Enter the amount: ");
             double amount = Convert.ToDouble(Console.ReadLine());
 
+            //Point 1-b - Asking user if data is required for any specific date
             Console.Write("Do you want to fetch the exchange rate for any specific Date: ");
             string answer = Console.ReadLine().ToUpper();
             string date = "latest";

@@ -6,6 +6,8 @@ using ExchangeCurrencyAPIService;
 [Route("[Controllers]")]
 public class CurrencyExchnageAPISercvice : ControllerBase
 {
+
+    //Point 1- Calling fixer API
     public async Task<Dictionary<string, double>> GetCurrencyExchangeRates(string date)
     
     {

@@ -1,6 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.Azure.Mobile.Server.Config;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System;
+namespace ExchangeCurrencyAPIService;
 
 public class CurrencyUpdaterService
 {
@@ -12,23 +15,19 @@ public class CurrencyUpdaterService
         _configuration = configuration;
         _httpClient = new HttpClient();
     }
-
+    //1-c- DB creation and batch job creation
     public async Task FetchAndStoreExchangeRatesAsync()
     {
         try
         {
-            var apiKey = _configuration["FixerApiKey"];
-            // var url = $"http://data.fixer.io/api/latest?apikey={apiKey}";
-            var url = "http://data.fixer.io/api/latest?access_key=161c036cebf156a83f79dd0c00cfe6e1";
+            string url = $"{AppConfig.Base_Url}access_key={AppConfig.Api_Key}";
+           // var url = "http://data.fixer.io/api/latest?access_key=161c036cebf156a83f79dd0c00cfe6e1";
             Console.WriteLine(url);
-
-            // Fetch the latest exchange rates from Fixer API
             var response = await _httpClient.GetStringAsync(url);
             var exchangeRates = JsonConvert.DeserializeObject<ExchangeRatesResponse>(response);
 
             if (exchangeRates?.Rates != null)
             {
-                // Store each rate in the database
                 foreach (var rate in exchangeRates.Rates)
                 {
                     await StoreCurrencyRateInDatabaseAsync(rate.Key, DateTime.UtcNow, rate.Value);
@@ -69,7 +68,6 @@ public class CurrencyUpdaterService
     }
 }
 
-// Define a class to hold the JSON structure from the Fixer.io API response
 public class ExchangeRatesResponse
 {
     public string Base { get; set; }
