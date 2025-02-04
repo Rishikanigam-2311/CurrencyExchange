@@ -21,16 +21,9 @@ public class CurrencyExchnageAPISercvice : ControllerBase
             throw new Exception($"Unable to fetch exhange rate: {response.StatusCode}");
         }
         
-
-
-
-
-        // Deserialize rates into a dictionary
-        //string responseData = null;
         string responseData = await response.Content.ReadAsStringAsync();
         dynamic json = JsonConvert.DeserializeObject(responseData);
        
-        // Deserialize rates into a dictionary
         return JsonConvert.DeserializeObject<Dictionary<string, double>>(JsonConvert.SerializeObject(json?.rates));
        
     }
