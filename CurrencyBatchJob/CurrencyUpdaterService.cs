@@ -18,15 +18,10 @@ public class CurrencyUpdaterService
     public async Task FetchAndStoreExchangeRatesAsync()
     {
         try
-        { //fg
+        {
             string url = $"{AppConfig.Base_Url}access_key={AppConfig.Api_Key}";
-
-            Console.WriteLine(url);
             var response = await _httpClient.GetStringAsync(url);
             var exchangeRates = JsonConvert.DeserializeObject<ExchangeRatesResponse>(response);
-            Console.WriteLine("response is-" + response);
-            Console.WriteLine("\n exchangeRates is-" + exchangeRates);
-
 
             if (exchangeRates?.Rates != null)
             {
@@ -62,7 +57,7 @@ public class CurrencyUpdaterService
                 command.Parameters.AddWithValue("@Date", date);
                 command.Parameters.AddWithValue("@Rate", rate);
 
-               await command.ExecuteNonQueryAsync();
+                await command.ExecuteNonQueryAsync();
             }
 
             Console.WriteLine($"Successfully inserted exchange rate for {currencyCode}.");

@@ -8,10 +8,8 @@ public class CurrencyExchnageAPISercvice : ControllerBase
 {
     //Point 1- Calling fixer API
     public async Task<Dictionary<string, double>> GetCurrencyExchangeRates(string date)
-    
     {
         string url = $"{AppConfiguration.Base_Url}{date}?access_key={AppConfiguration.Api_Key}";
-        Console.WriteLine(url);
 
         using HttpClient client = new();
 
@@ -19,13 +17,13 @@ public class CurrencyExchnageAPISercvice : ControllerBase
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Unable to fetch exhange rate: {response.StatusCode}");
+            throw new Exception($"Failed to fetch exchange rates.");
         }
-        
+
         string responseData = await response.Content.ReadAsStringAsync();
         dynamic json = JsonConvert.DeserializeObject(responseData);
-       
+
         return JsonConvert.DeserializeObject<Dictionary<string, double>>(JsonConvert.SerializeObject(json?.rates));
-       
+
     }
 }

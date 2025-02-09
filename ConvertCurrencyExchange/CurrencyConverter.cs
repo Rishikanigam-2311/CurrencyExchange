@@ -7,10 +7,11 @@ public class CurrencyExchangeCalculator
 {
     public static async Task Main()
     {
+        DateTime currentDate = DateTime.Now.Date;
         //Point 1-a - Console app for currency converter
         try
         {
-            Console.Write("Welcome to Currency Exchange calculator! \n Enter the first currency code: ");
+            Console.Write("Welcome to Currency Exchange calculator! \nEnter the first currency code: ");
             string first = Console.ReadLine().ToUpper();
             if (first.Length > 3)
             {
@@ -24,28 +25,37 @@ public class CurrencyExchangeCalculator
                 throw new ArgumentException("Invalid currency code.");
             }
 
-            Console.Write("Enter the amount: ");
+            Console.Write("Enter the Amount: ");
             double amount = Convert.ToDouble(Console.ReadLine());
 
             //Point 1-b - Asking user if data is required for any specific date
-            Console.Write("Do you want to fetch the exchange rate for any specific Date: ");
+            Console.Write("Want to fetch exchange rate for a specific Date? ");
             string answer = Console.ReadLine().ToUpper();
             string date = "latest";
             if (answer == "YES")
             {
-                Console.Write("Enter the Data in format yyyy-MM-dd: ");
+                Console.Write("Enter the Date: ");
                 date = Console.ReadLine();
 
-            }
+                if (DateTime.TryParse(date, out DateTime inputDate))
+                {
+                    if (inputDate > currentDate)
+                    {
+                        {
+                            throw new ArgumentException($"Invalid future date provided");
+                        }
+                    }
+                   
+                }
 
-            Console.WriteLine("Fetching the latest exchange rates: ");
+            }
             CurrencyExchnageAPISercvice apiService = new CurrencyExchnageAPISercvice();
 
             var exchangeRates = await apiService.GetCurrencyExchangeRates(date);
 
             double result = ConvertCurrency(first, target, amount, exchangeRates);
 
-            Console.WriteLine($"\n{amount} {first} is equal to {result:F2} in {target}.");
+            Console.WriteLine($"\n{amount} {first} is equal to {result} in {target}.");
         }
         catch (Exception e)
         {
