@@ -26,12 +26,20 @@ public class CurrencyExchangeCalculator
             }
 
             Console.Write("Enter the Amount: ");
-            double amount = Convert.ToDouble(Console.ReadLine());
+            string? input = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(input)) 
+            {
+                throw new ArgumentException("Amount is required.");
+            }
+
+            double amount = Convert.ToDouble(input); 
 
             //Point 1-b - Asking user if data is required for any specific date
             Console.Write("Want to fetch exchange rate for a specific Date? ");
             string answer = Console.ReadLine().ToUpper();
             string date = "latest";
+
             if (answer == "YES")
             {
                 Console.Write("Enter the Date: ");
